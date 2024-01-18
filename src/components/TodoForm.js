@@ -110,14 +110,14 @@ function TodoAppForm() {
     return val + 1;
   };
   const updateValue1 = (val) => {
-    console.log(val + 'a');
+    //console.log(val + 'a');
     return val + 'a';
   };
   const buttonOnClick = () => {
     //setValue(value + 1);
     //setValue((val) => val + 1);
     setValue(updateValue1);
-    console.log('I am button');
+    //console.log('I am button');
   };
 
   //buttonOnClick();
@@ -139,19 +139,56 @@ function TodoAppForm() {
   //map method working;
   //map method/function is array function
   //map method receive callback and apply callback functio on each array item
-  const users = [];
-  for (let i = 1; i <= 100; i++) {
-    users.push({ id: `${i}`, name: 'User ' + i });
-  }
-  console.log('orignal array=>', users);
-  const modifiedUsers = users.map((item, index) => {
-    // if (item.id % 2 === 0) {
-    //   return { id: item, key: index };
-    // }
-    //ssreturn { id: item, key: index, label: 'this is a label' };
-  });
+  const students = [];
 
-  console.log('modified array=>', modifiedUsers);
+  for (let i = 1; i <= 5; i++) {
+    let fail = false;
+    if (i % 2 === 0) {
+      fail = true;
+    }
+    students.push({ id: `${i}`, name: 'Student  ' + i, result: fail });
+  }
+
+  // let paidBillUsers = [];
+  // paidBillUsers = users.filter((ele) => ele.billPaid === true);
+  // paidBillUsers = users.map(function (ele) {
+  //   if (ele.billPaid === true) {
+  //     return ele;
+  //   } else {
+  //     return ele;
+  //   }
+  // });
+
+  // console.log('original users');
+  // console.log(users);
+  // console.log('bill paid users');
+  // console.log(paidBillUsers);
+
+  // function getPaidBillUsers() {
+  //   for (let i = 0; i < users.length; i++) {
+  //     if (users[i].billPaid === true) {
+  //       paidBillUsers.push(users[i]);
+  //     }
+  //   }
+  // }
+  // getPaidBillUsers();
+
+  // users.map(function (element) {
+  //   console.log(element);
+  // });
+
+  // //console.log('orignal array=>', users);
+  // const modifiedUsers = users.map((item, index) => {
+  //   // if (item.id % 2 === 0) {
+  //   //   return { id: item, key: index };
+  //   // }
+  //   //ssreturn { id: item, key: index, label: 'this is a label' };
+  // });
+
+  //map method working
+  //map take a callback funtion and apply callback on each item of the array
+
+  //console.log('modified array=>', modifiedUsers);
   /*
   
 
@@ -171,6 +208,21 @@ function TodoAppForm() {
   // showUsers(function (item) {
   //   console.log('native callback item', item);
   // });
+
+  const markPass = (item) => {
+    //debugger;
+    const id = item.id;
+    for (let i = 0; i < students.length; i++) {
+      //break;
+      if (i === 1) {
+        console.log('continue', i);
+        //break;
+        continue;
+      }
+      console.log('inside loop but after if staem');
+    }
+    // /console.log('clicked item=>', item);
+  };
 
   return (
     <div
@@ -214,31 +266,55 @@ function TodoAppForm() {
         <strong>Mobile: {mobileNumber}</strong>
         <b>Value : {value}</b>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button
+          {/* <button
             onClick={() => setCount((val) => val - 1)}
             style={{ fontSize: 20 }}
           >
             Dcrease counter
           </button>
-          <label style={{ fontWeight: 'bold' }}>Counter: {count}</label>
-          <button
+          <label style={{ fontWeight: 'bold' }}>Counter: {count}</label> */}
+          {/* <button
             onClick={() => setCount((val) => val + 1)}
             style={{ fontSize: 20 }}
           >
             Increase counter
-          </button>
+          </button> */}
         </div>
-        <ul>
-          {users.map((item, index, orginalArray) => (
-            <li>
-              id : {item.id} - name: {item.name} - key: {index}
-            </li>
-          ))}
-        </ul>
+        <table style={{ width: '500px' }}>
+          <thead>
+            <th>Role#</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+            {students.map((item) => {
+              return (
+                <tr>
+                  <td style={{ textAlign: 'center' }}>{item.id}</td>
+                  <td style={{ textAlign: 'center' }}>{item.name}</td>
+                  {/*type casting convert one tyep to another type
+                    number to string
+                    boolean to string
+                    string to number
+                    boolean to number
+                  */}
+                  {/* <td>{item.result.toString()}</td> */}
+                  <td style={{ textAlign: 'center' }}>
+                    {item.result ? 'Pass' : 'Fail'}
+                  </td>
+                  <td>
+                    <button onClick={() => markPass(item)}>mark pass</button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-      <button style={{ fontSize: 20 }} onClick={buttonOnClick}>
+      {/* <button style={{ fontSize: 20 }} onClick={buttonOnClick}>
         Save Todo
-      </button>
+      </button> */}
     </div>
   );
 }
