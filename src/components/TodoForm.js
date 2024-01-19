@@ -5,7 +5,7 @@
 // React Expression {}
 // React style apply {}
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const studentList = [];
 
 for (let i = 1; i <= 5; i++) {
@@ -19,6 +19,8 @@ for (let i = 1; i <= 5; i++) {
 function TodoAppForm() {
   const [students, setStudents] = useState(studentList);
   const [studentId, setStudentId] = useState(0);
+  const [usestate1, setUsestate1] = useState(0);
+  const [usestate2, setUsestate2] = useState(0);
 
   function updateStudent(student) {
     if (student.id === studentId) {
@@ -34,26 +36,53 @@ function TodoAppForm() {
     //break fuction
   }
 
-  const markPass = (studentId) => {
-    setStudentId(studentId);
-    const updatedStudents = students.map(updateStudent);
-    setStudents(updatedStudents);
+  const updateStudentResultInUseEffectg = () => {
+    //if (studentId !== 0) {
+    const tmpStudents = [...students];
+    const matchingStudent = tmpStudents.find((item) => item.id === studentId);
+    const matchingStudentIndex = tmpStudents.findIndex(
+      (item) => item.id === studentId
+    );
+    matchingStudent.result = !matchingStudent.result;
 
-    // const student = students.find((item) => item.id === studentId);
-    // student.result = true;
-    // const updatedStudents = [...students, student];
-    // setStudents(updatedStudents);
-    // for (let i = 0; i < students.length; i++) {
-    //   const student = students[i];
-    //   if (student.id === studentId) {
-    //     student.result = true;
-    //     setStudents(students);
-    //     break;
-    //   }
-    // }
-    // debugger;
-    //setStudents(studentList1);
+    tmpStudents[matchingStudentIndex] = matchingStudent;
+    setStudents(tmpStudents);
+    //}
   };
+
+  const updateStudentResult = (studentId) => {
+    setStudentId(studentId);
+    setUsestate1(studentId);
+    setUsestate2(studentId);
+  };
+
+  // useEffect will execute on following steps.
+  // on page load or on render
+  // will execute if any depnedncy change
+  useEffect(() => {
+    console.log('I am useEffect I will run on page load or re-reder');
+  }, []);
+
+  // true / false
+  // true = 1
+  // false = 0
+
+  useEffect(() => {
+    //if (studentId) {
+    updateStudentResultInUseEffectg();
+    //}
+  }, [studentId]);
+
+  //use effect used for side effects
+  useEffect(() => {
+    //if (usestate1) {
+    console.log('use state 1');
+    //}
+    //if (usestate2) {
+    console.log('use state 2');
+    // }
+    console.log('I will be runing on render');
+  }, [usestate1, usestate2]);
 
   return (
     <div
@@ -79,7 +108,9 @@ function TodoAppForm() {
                     {item.result ? 'Pass' : 'Fail'}
                   </td>
                   <td>
-                    <button onClick={() => markPass(item.id)}>mark pass</button>
+                    <button onClick={() => updateStudentResult(item.id)}>
+                      mark pass {usestate1} = {usestate2}
+                    </button>
                   </td>
                 </tr>
               );
