@@ -18,71 +18,21 @@ for (let i = 1; i <= 5; i++) {
 //component functon always start form Upercase.
 function TodoAppForm() {
   const [students, setStudents] = useState(studentList);
-  const [studentId, setStudentId] = useState(0);
-  const [usestate1, setUsestate1] = useState(0);
-  const [usestate2, setUsestate2] = useState(0);
+  const [users, setUsers] = useState([]);
+  const [isApiCall, setIsApiCall] = useState(false);
 
-  function updateStudent(student) {
-    if (student.id === studentId) {
-      if (student.result === true) {
-        student.result = false;
-        return student;
-      } else {
-        student.result = true;
-        return student;
-      }
-    }
-    return student;
-    //break fuction
-  }
-
-  const updateStudentResultInUseEffectg = () => {
-    //if (studentId !== 0) {
-    const tmpStudents = [...students];
-    const matchingStudent = tmpStudents.find((item) => item.id === studentId);
-    const matchingStudentIndex = tmpStudents.findIndex(
-      (item) => item.id === studentId
-    );
-    matchingStudent.result = !matchingStudent.result;
-
-    tmpStudents[matchingStudentIndex] = matchingStudent;
-    setStudents(tmpStudents);
-    //}
-  };
-
-  const updateStudentResult = (studentId) => {
-    setStudentId(studentId);
-    setUsestate1(studentId);
-    setUsestate2(studentId);
-  };
-
-  // useEffect will execute on following steps.
-  // on page load or on render
-  // will execute if any depnedncy change
   useEffect(() => {
-    console.log('I am useEffect I will run on page load or re-reder');
+    //fetch
+    //default request type is GET
+    setIsApiCall(true);
+    fetch('https://jsonplaceholder.typicode.com/users').then(async (data) => {
+      //console.log('data fetched ');
+      //console.log(data);
+      const users = await data.json();
+      setUsers(users);
+      setIsApiCall(false);
+    });
   }, []);
-
-  // true / false
-  // true = 1
-  // false = 0
-
-  useEffect(() => {
-    //if (studentId) {
-    updateStudentResultInUseEffectg();
-    //}
-  }, [studentId]);
-
-  //use effect used for side effects
-  useEffect(() => {
-    //if (usestate1) {
-    console.log('use state 1');
-    //}
-    //if (usestate2) {
-    console.log('use state 2');
-    // }
-    console.log('I will be runing on render');
-  }, [usestate1, usestate2]);
 
   return (
     <div
@@ -91,32 +41,30 @@ function TodoAppForm() {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <table style={{ width: '500px' }}>
-          <thead>
-            <th>Role#</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Action</th>
-          </thead>
-          <tbody>
-            {students?.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td style={{ textAlign: 'center' }}>{item.id}</td>
-                  <td style={{ textAlign: 'center' }}>{item.name}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    {item.result ? 'Pass' : 'Fail'}
-                  </td>
-                  <td>
-                    <button onClick={() => updateStudentResult(item.id)}>
-                      mark pass {usestate1} = {usestate2}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {isApiCall === false ? (
+          <table style={{ width: '500px' }}>
+            <thead>
+              <th>ID#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>City</th>
+            </thead>
+            <tbody>
+              {users?.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td style={{ textAlign: 'center' }}>{item.id}</td>
+                    <td style={{ textAlign: 'center' }}>{item.name}</td>
+                    <td style={{ textAlign: 'center' }}>{item.email}</td>
+                    <td>{item.address.city}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          'Loading data....'
+        )}
       </div>
     </div>
   );
