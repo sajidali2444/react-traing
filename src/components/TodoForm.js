@@ -23,6 +23,9 @@ function TodoAppForm() {
   const [dob, setDOB] = useState('');
   const [admissionDate, setAdmissionDate] = useState('');
   const [contactNumber, setContactNumber] = useState('');
+  const [firstNameRequired, setFirstNameRequired] = useState(false);
+  const [lastNameRequired, setlastNameRequired] = useState(false);
+  const [fatherNameRequired, setFatherNameRequired] = useState(false);
 
   const getFirstName = (event) => {
     setFirstName(event.target.value);
@@ -43,7 +46,53 @@ function TodoAppForm() {
     setContactNumber(event.target.value);
   };
 
+  const onFocusOut = ({ target: { id, value } }) => {
+    if (id === 'firstName' && value) {
+      setFirstNameRequired(false);
+    } else if (id === 'firstName' && !value) {
+      setFirstNameRequired(true);
+    }
+
+    if (id === 'lastName' && value) {
+      setlastNameRequired(false);
+    } else if (id === 'lastName' && !value) {
+      setlastNameRequired(true);
+    }
+
+    if (id === 'fatherName' && value) {
+      setFatherNameRequired(false);
+    } else if (id === 'fatherName' && !value) {
+      setFatherNameRequired(true);
+    }
+  };
+
   const submit = () => {
+    // const value1 = 11;
+    // const value2 = 12;
+    // // logical gates
+    // //AND &&
+    // //OR ||
+    // //NOT ! reverse
+    // // >
+    // // <
+    // // ===
+    // const flag = null;
+    // if (!flag) {
+    //   console.log('all values are equal');
+    // } else {
+    //   console.log('no value equal');
+    // }
+
+    //ternary operator
+    // if else => ? :
+    // expression ? do work : do work in else
+
+    // const istrue = true;
+
+    // //ternary operator
+    // const result =
+    //   istrue === true ? 'True value detected' : 'False value detected';
+    // console.log(result);
     /*
     if (firstName === '') {
       alert('first name is empty');
@@ -74,16 +123,13 @@ function TodoAppForm() {
     */
 
     if (firstName === '') {
-      alert('Student First Name is required');
-      return;
+      setFirstNameRequired(true);
     }
     if (lastName === '') {
-      alert('Student Last Name is required');
-      return;
+      setlastNameRequired(true);
     }
     if (fatherName === '') {
-      alert('Student father name is required');
-      return;
+      setFatherNameRequired(true);
     }
 
     console.log({
@@ -116,7 +162,11 @@ function TodoAppForm() {
         >
           <div>
             <div
-              style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+              }}
             >
               <label>First name</label>
               <input
@@ -124,7 +174,18 @@ function TodoAppForm() {
                 id="firstName"
                 name="firstName"
                 onChange={getFirstName}
+                style={{
+                  ...(firstNameRequired && {
+                    border: '1px solid red',
+                  }),
+                }}
+                onBlur={onFocusOut}
               />
+              {firstNameRequired === true ? (
+                <p style={{ color: 'red', margin: '0 0 10px 0' }}>
+                  First name is required.
+                </p>
+              ) : null}
             </div>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
@@ -135,7 +196,18 @@ function TodoAppForm() {
                 id="lastName"
                 name="lastName"
                 onChange={getLastName}
+                style={{
+                  ...(lastNameRequired && {
+                    border: '1px solid red',
+                  }),
+                }}
+                onBlur={onFocusOut}
               />
+              {lastNameRequired ? (
+                <p style={{ color: 'red', margin: '0 0 10px 0' }}>
+                  Last name is required.
+                </p>
+              ) : null}
             </div>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
@@ -146,7 +218,18 @@ function TodoAppForm() {
                 id="fatherName"
                 name="fatherName"
                 onChange={getFatherName}
+                style={{
+                  ...(fatherNameRequired && {
+                    border: '1px solid red',
+                  }),
+                }}
+                onBlur={onFocusOut}
               />
+              {fatherNameRequired === true ? (
+                <p style={{ color: 'red', margin: '0 0 10px 0' }}>
+                  Father name is required.
+                </p>
+              ) : null}
             </div>
           </div>
           <div>
