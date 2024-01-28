@@ -26,6 +26,7 @@ function TodoAppForm() {
   const [firstNameRequired, setFirstNameRequired] = useState(false);
   const [lastNameRequired, setlastNameRequired] = useState(false);
   const [fatherNameRequired, setFatherNameRequired] = useState(false);
+  const [students, setStudents] = useState([]);
 
   const getFirstName = (event) => {
     setFirstName(event.target.value);
@@ -67,86 +68,73 @@ function TodoAppForm() {
   };
 
   const submit = () => {
-    // const value1 = 11;
-    // const value2 = 12;
-    // // logical gates
-    // //AND &&
-    // //OR ||
-    // //NOT ! reverse
-    // // >
-    // // <
-    // // ===
-    // const flag = null;
-    // if (!flag) {
-    //   console.log('all values are equal');
-    // } else {
-    //   console.log('no value equal');
-    // }
-
-    //ternary operator
-    // if else => ? :
-    // expression ? do work : do work in else
-
-    // const istrue = true;
-
-    // //ternary operator
-    // const result =
-    //   istrue === true ? 'True value detected' : 'False value detected';
-    // console.log(result);
-    /*
-    if (firstName === '') {
-      alert('first name is empty');
-      alert('first name is empty');
-      alert('first name is empty');
-      alert('first name is empty');
-    }
-    alert('first name is not empty');
-*/
-    /*
-
-    if (firstName === '') {
-      alert('Student First Name is required');
-    } else if (lastName === '') {
-      alert('Student Last Name is required');
-    } else if (fatherName === '') {
-      alert('Student father name is required');
-    } else {
-      console.log({
-        firstName,
-        lastName,
-        fatherName,
-        contactNumber,
-        admissionDate,
-        dob,
-      });
-    }
-    */
-
-    if (firstName === '') {
+    if (!firstName) {
       setFirstNameRequired(true);
     }
-    if (lastName === '') {
+    if (!lastName) {
       setlastNameRequired(true);
     }
-    if (fatherName === '') {
+    if (!fatherName) {
       setFatherNameRequired(true);
     }
 
-    console.log({
-      firstName,
-      lastName,
-      fatherName,
-      contactNumber,
-      admissionDate,
-      dob,
+    if (!firstNameRequired && !lastNameRequired && !fatherNameRequired) {
+      setStudents((prev) => [
+        ...prev,
+        {
+          firstName,
+          lastName,
+          fatherName,
+          contactNumber,
+          admissionDate,
+          dob,
+          isFeesPaid: false,
+        },
+      ]);
+    }
+  };
+
+  const deleteStudent = (elementIndex) => {
+    //students
+    //map
+    //find
+    //some
+    //filter
+    const remainingStudents = students.filter(
+      (item, index) => index !== elementIndex
+    );
+    setStudents(remainingStudents);
+    console.log(remainingStudents);
+  };
+  const receiveFees = (currentIndex) => {
+    //find element by index
+    // const stduent = students.find((item, index) => index === currentIndex);
+    // stduent.isFeesPaid = true;
+    // setStudents((prev) => [...prev, stduent]);
+    // console.log(stduent);
+
+    //map returns new array exactly as old array
+    const updatedStudents = students.map((item, index) => {
+      if (index === currentIndex) {
+        item.isFeesPaid = true;
+        return item;
+        //return { ...item, isFeesPaid: true };
+      }
+      return item;
     });
+    setStudents(updatedStudents);
+
+    //const paidFeesStudent = { ...stduent, isFeesPaid:true };
+
+    // update element property IsFeesPaid to true
+    // update students array
   };
   return (
     <div
       style={{
         display: 'flex',
         alignItems: 'center',
-        border: '1px solid red',
+
         justifyContent: 'center',
         flexDirection: 'column',
       }}
@@ -269,6 +257,43 @@ function TodoAppForm() {
           </button>
         </div>
       </form>
+
+      <div style={{ border: '1px solid gray', marginTop: '20px' }}>
+        {students.length !== 0 ? (
+          <table border={1} width={800} style={{ textAlign: 'center' }}>
+            <th>Student Name</th>
+            <th>Father Name</th>
+            <th>DOB</th>
+            <th>Admission Date</th>
+            <th>Contact#</th>
+            <th>Is Fees Paid</th>
+            <th>Delete</th>
+            <tbody>
+              {students.map((currentIem, index, items) => {
+                const fullName =
+                  currentIem.firstName + ' ' + currentIem.lastName;
+                return (
+                  <tr>
+                    <td>{fullName}</td>
+                    <td>{currentIem.fatherName}</td>
+                    <td>{currentIem.dob}</td>
+                    <td>{currentIem.admissionDate}</td>
+                    <td>{currentIem.contactNumber}</td>
+                    <td>{currentIem.isFeesPaid ? 'Paid' : 'Pending'}</td>
+                    <td>
+                      <button onClick={() => receiveFees(index)}>
+                        Click to recive fees
+                      </button>
+                      <button onClick={() => deleteStudent(index)}>X</button>
+                    </td>
+                  </tr>
+                );
+              })}
+              <tr></tr>
+            </tbody>
+          </table>
+        ) : null}
+      </div>
     </div>
   );
 }
