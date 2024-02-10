@@ -25,7 +25,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/students" element={<Students />} />
-        <Route path="/add/:studentId?" element={<AddStudent />} />
+        <Route path="/add/:studentId?/:rollNumber?" element={<AddStudent />} />
         {/* <Route path="/edit/:studetId/:rollNumber?" element={<EditStudent />} /> */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

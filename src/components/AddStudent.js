@@ -1,13 +1,49 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 const storageKey = 'students';
+
+/**
+ *
+ * @returns
+ * Acccept params
+ * Add student component
+ */
 export default function AddStudent() {
   const navigate = useNavigate();
+  const param = useParams();
+  const studentId = Number(param.studentId);
+  console.log(typeof studentId);
+  console.log(studentId);
+
+  const students = localStorage.getItem('students');
+  const convertedResult = JSON.parse(students);
+
+  const singleStudent = convertedResult?.find((item) => item.id === studentId);
+  //console.log(singleStudent);
+
+  //const url = window.location.href;
+  //console.log(url[url.length - 1]);
+  //console.log(url.charAt(url.length - 1));
+  //const url2 = url.split('/');
+  //console.log(url2[url2.length - 1]);
+  //console.log(url2[url2.length - 2]);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [fatherName, setFatherName] = useState('');
   const [mobile, setMobile] = useState('');
+
+  useEffect(() => {
+    if (studentId) {
+      console.log('i got stduent');
+      const { firstName, lastName, fatherName, mobile } = singleStudent;
+      setFirstName(firstName);
+      setLastName(lastName);
+      setFatherName(fatherName);
+      setMobile(mobile);
+    }
+  }, [studentId]);
+
   const getFirstName = (event) => {
     setFirstName(event.target.value);
   };
@@ -47,6 +83,36 @@ export default function AddStudent() {
 
     navigate('/');
   };
+
+  const onEdit = (event) => {
+    event.preventDefault();
+    //get existing stduent from local storage
+    //update existing student and save in local storage
+    const existingStudent = convertedResult?.find(
+      (item) => item.id === studentId
+    );
+    const updatedStudent = {
+      ...existingStudent,
+      firstName,
+      lastName,
+      fatherName,
+      mobile,
+    };
+
+    const updatedStudetns = convertedResult?.map((item) => {
+      if (item.id === studentId) {
+        return updatedStudent;
+      }
+      return item;
+    });
+
+    localStorage.setItem('students', JSON.stringify(updatedStudetns));
+
+    //navigate('/');
+    window.location.href = '/';
+
+    console.log('editing student');
+  };
   return (
     <div
       style={{
@@ -56,7 +122,7 @@ export default function AddStudent() {
         flexDirection: 'column',
       }}
     >
-      <h1>Add student page</h1>
+      <h1>{studentId ? 'Edit' : 'Add'} student page</h1>
       <form>
         <div style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
@@ -72,6 +138,7 @@ export default function AddStudent() {
                 type="text"
                 id="firstName"
                 name="firstName"
+                value={firstName}
                 onChange={getFirstName}
               ></input>
               <label> Last Name </label>
@@ -79,6 +146,7 @@ export default function AddStudent() {
                 type="text"
                 id="lastName"
                 name="lastName"
+                value={lastName}
                 onChange={getLastName}
               ></input>
             </div>
@@ -94,6 +162,7 @@ export default function AddStudent() {
                 type="text"
                 id="fatherName"
                 name="fatherName"
+                value={fatherName}
                 onChange={getFatherName}
               ></input>
               <label> Mobile </label>
@@ -101,22 +170,38 @@ export default function AddStudent() {
                 type="text"
                 id="mobile"
                 name="mobile"
+                value={mobile}
                 onChange={getMobile}
               ></input>
             </div>
           </div>
 
           <div style={{ marginTop: '10px', marginBottom: '20px' }}>
-            <button
-              onClick={onSubmit}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                marginTop: '10px',
-              }}
-            >
-              Submit
-            </button>
+            {!studentId && (
+              <button
+                onClick={onSubmit}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginTop: '10px',
+                }}
+              >
+                Submit
+              </button>
+            )}
+
+            {studentId ? (
+              <button
+                onClick={onEdit}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginTop: '10px',
+                }}
+              >
+                Edit
+              </button>
+            ) : null}
           </div>
         </div>
       </form>

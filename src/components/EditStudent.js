@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 const storageKey = 'students';
+
+/**
+ *
+ * @returns
+ * Acccept params
+ * Display list of students
+ */
 export default function EditStudent() {
   const navigate = useNavigate();
   const param = useParams();
