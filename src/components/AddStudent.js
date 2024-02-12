@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Input from './Input';
 const storageKey = 'students';
 
 /**
@@ -8,9 +9,23 @@ const storageKey = 'students';
  * Acccept params
  * Add student component
  */
+//url
+//https://www.google.com/search?q=best-book
+//protocol => http
+//subdomain=www
+//main domain=google.com
+//.com => domain type
+//path name or resource => search
+//query=>?q
+//query string => key=value
+//https://localhost.com/add or edit or delete or search
 export default function AddStudent() {
   const navigate = useNavigate();
   const param = useParams();
+  const url = window.location.href;
+  console.log(url);
+
+  //console.log(url.get('rollnumber'));
   const studentId = Number(param.studentId);
   console.log(typeof studentId);
   console.log(studentId);
@@ -113,6 +128,7 @@ export default function AddStudent() {
 
     console.log('editing student');
   };
+  function OnEdit() {}
   return (
     <div
       style={{
@@ -134,13 +150,23 @@ export default function AddStudent() {
               }}
             >
               <label> First Name </label>
-              <input
+              {/*self close 
+              props or properties
+              */}
+              <Input
+                id={'firstName'}
+                name={'firstName'}
+                value={firstName}
+                type="text"
+                onchange={getFirstName}
+              />
+              {/* <input
                 type="text"
                 id="firstName"
                 name="firstName"
                 value={firstName}
                 onChange={getFirstName}
-              ></input>
+              ></input> */}
               <label> Last Name </label>
               <input
                 type="text"
